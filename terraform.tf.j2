@@ -9,8 +9,8 @@ terraform {
   backend "s3" {
     access_key = "{{access_key}}"
     secret_key = "{{secret_key}}"
-    bucket = "{{state_bucket}}"
-    key    = "development-infrastructure/terraform.tfstate"
-    region = "{{region}}"
+    bucket     = "{{state_bucket}}"
+    key        = "development-infrastructure/terraform.tfstate"
+    region     = "{{region}}"
   }
 }
