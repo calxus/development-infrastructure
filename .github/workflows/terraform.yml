@@ -55,31 +55,34 @@ jobs:
     name: 'Terraform'
     runs-on: ubuntu-latest
 
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
         shell: bash
 
-    # Checkout the repository to the GitHub Actions runner
     steps:
+
     - name: Checkout
       uses: actions/checkout@v2
 
-    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token 
+    - name: Compile templates
+      uses: cuchi/jinja2-action@v1.1.0
+      with:
+        template: terraform.tfvars.j2
+        output_file: terraform.tfvars
+    - name:
+      run: cat terraform.tfvars
+
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
       with:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: terraform init
 
-    # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
       run: terraform fmt -check
 
-    # Generates an execution plan for Terraform
     - name: Terraform Plan
       run: terraform plan
     
