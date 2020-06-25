@@ -4,8 +4,8 @@ provider "aws" {
   access_key = "{{access_key}}"
   secret_key = "{{secret_key}}"
   backend "s3" {
-    bucket         = "{{state_bucket}}"
-    key            = "development-infrastructure/terraform.tfstate"
-    region         = "{{region}}"
+    bucket = "{{state_bucket}}"
+    key    = "development-infrastructure/terraform.tfstate"
+    region = "{{region}}"
   }
 }
