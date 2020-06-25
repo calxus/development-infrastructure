@@ -19,6 +19,15 @@ resource "aws_security_group_rule" "allow_ingress_ssh" {
   security_group_id = aws_security_group.development.id
 }
 
+resource "aws_security_group_rule" "allow_egress_all" {
+  type              = "egress"
+  to_port           = 0
+  protocol          = -1
+  cidr_blocks       = ["0.0.0.0/0"]
+  from_port         = 0
+  security_group_id = aws_security_group.development.id
+}
+
 resource "aws_subnet" "development" {
   count                   = length(data.aws_availability_zones.current.zone_ids)
   cidr_block              = cidrsubnet(var.vpc_cidr_block, var.subnets.public.newbits, var.subnets.public.netnum + count.index)
