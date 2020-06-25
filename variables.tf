@@ -1,8 +1,8 @@
 variable "name" {
-    type    = string
-    default = "development-infrastructure"
+  type    = string
+  default = "development-infrastructure"
 }
 
 variable "region" {
-    type = string
+  type = string
 }
