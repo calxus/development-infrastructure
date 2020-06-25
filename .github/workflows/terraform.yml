@@ -69,6 +69,11 @@ jobs:
       with:
         template: terraform.tfvars.j2
         output_file: terraform.tfvars
+        strict: true
+        variables: |
+          region=${{ secrets.REGION }}
+          vpc_cidr_block=${{ secrets.VPC_CIDR_BLOCK }}
+          
     - name:
       run: cat terraform.tfvars
 
