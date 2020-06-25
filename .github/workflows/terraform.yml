@@ -73,6 +73,8 @@ jobs:
         variables: |
           access_key=${{ secrets.AWS_ACCESS_KEY_ID }}
           secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          state_bucket=${{ secrets.STATE_BUCKET }}
+          region=${{ secrets.REGION }}
 
     - name: Compile templates
       uses: cuchi/jinja2-action@v1.1.0

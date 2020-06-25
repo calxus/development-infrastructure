@@ -4,3 +4,12 @@ provider "aws" {
   access_key = "{{access_key}}"
   secret_key = "{{secret_key}}"
 }
+
+data "terraform_remote_state" "development-infrastructure" {
+  backend = "s3"
+  config = {
+    bucket = "{{state_bucket}}"
+    key    = "development-infrastructure/terraform.tfstate"
+    region = "{{region}}"
+  }
+}
