@@ -9,7 +9,6 @@ def main():
 
     secret_name = "development"
     region_name = "eu-west-1"
-    secret = "{}"
 
     session = boto3.session.Session()
     client = session.client(
