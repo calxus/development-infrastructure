@@ -36,15 +36,13 @@ resource "aws_subnet" "development" {
   map_public_ip_on_launch = true
 }
 
-resource "aws_internet_gateway" "development" {
+resource "aws_egress_only_internet_gateway" "development" {
   vpc_id = aws_vpc.development.id
 }
 
-resource "aws_route_table" "development" {
-  vpc_id = aws_vpc.development.id
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.development.id
-  }
+resource "aws_route" "r" {
+  route_table_id         = aws_vpc.development.main_route_table_id
+  destination_cidr_block = "0.0.0.0/0"
+  egress_only_gateway_id = aws_egress_only_internet_gateway.development.id
 }
+
