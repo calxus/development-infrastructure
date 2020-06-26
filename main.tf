@@ -35,3 +35,7 @@ resource "aws_subnet" "development" {
   availability_zone_id    = data.aws_availability_zones.current.zone_ids[count.index]
   map_public_ip_on_launch = true
 }
+
+resource "aws_internet_gateway" "development" {
+  vpc_id = aws_vpc.development.id
+}
