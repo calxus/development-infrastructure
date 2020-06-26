@@ -13,6 +13,10 @@ jobs:
     name: 'Terraform'
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        python-version: [3.8]
+
     defaults:
       run:
         shell: bash
@@ -22,35 +26,26 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Compile templates
-      uses: cuchi/jinja2-action@v1.1.0
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
       with:
-        template: terraform.tf.j2
-        output_file: terraform.tf
-        strict: true
-        variables: |
-          access_key=${{ secrets.AWS_ACCESS_KEY_ID }}
-          secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          state_bucket=${{ secrets.STATE_BUCKET }}
-          region=${{ secrets.REGION }}
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip3 install --upgrade pip3
+        pip3 install awscli jinja2 boto3
+        aws configure set aws_access_key_id {{ secrets.AWS_ACCESS_KEY_ID }}
+        aws configure set secret_access_key {{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws_configure set region {{ secrets.REGION }}
+        aws_configure set output json
 
-    - name: Compile templates
-      uses: cuchi/jinja2-action@v1.1.0
-      with:
-        template: terraform.tfvars.j2
-        output_file: terraform.tfvars
-        strict: true
-        variables: |
-          region=${{ secrets.REGION }}
-          vpc_cidr_block=${{ secrets.VPC_CIDR_BLOCK }}
-
-    - name:
-      run: cat terraform.tfvars
+    - name: Bootstrap
+      run: |
+        python3 bootstrap_terraform.py
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
-      with:
-        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
     - name: Terraform Init
       run: terraform init
